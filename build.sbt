@@ -22,7 +22,6 @@ lazy val `mleap-spark` = project.in(file("mleap-spark"))
   .settings(Common.settings)
   .settings(Common.sonatypeSettings)
   .settings(libraryDependencies ++= Dependencies.mleapSparkDependencies)
-  .dependsOn(`mleap-runtime`)
 
 lazy val `mleap-package` = project
   .settings(Common.settings)

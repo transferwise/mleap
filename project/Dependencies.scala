@@ -29,5 +29,4 @@ object Dependencies {
 
   lazy val mleapSparkDependencies = sparkDependencies
     .union(bundleMlDependencies)
-    .union(Seq("com.typesafe" % "config" % "1.2.1"))
 }
