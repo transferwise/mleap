@@ -1,32 +1,34 @@
 package org.apache.spark.ml.bundle.ops.feature
 
 import ml.bundle.Bundle
-import ml.bundle.Shape.Shape
-import ml.bundle.builder.{AttributeBuilder, ShapeBuilder}
-import ml.bundle.serializer.{AttributeWriter, NodeOp, NodeReader, OpRegistry}
-import ml.bundle.util.NodeDefWrapper
+import ml.bundle.op.{OpModel, OpNode}
+import ml.bundle.serializer.BundleContext
+import ml.bundle.wrapper._
 import org.apache.spark.ml.feature.StringIndexerModel
 
 /**
   * Created by hollinwilkins on 8/21/16.
   */
-object StringIndexerOp extends NodeOp[StringIndexerModel] {
-  override def opName: String = Bundle.BuiltinOps.feature.string_indexer
+object StringIndexerOp extends OpNode[StringIndexerModel, StringIndexerModel] {
+  override val Model: OpModel[StringIndexerModel] = new OpModel[StringIndexerModel] {
+    override def opName: String = Bundle.BuiltinOps.feature.string_indexer
 
-  override def name(obj: StringIndexerModel): String = obj.uid
+    override def store(context: BundleContext, model: WritableModel, obj: StringIndexerModel): Unit = {
+      model.withAttr(Attribute.stringList("labels", obj.labels))
+    }
 
-  override def shape(obj: StringIndexerModel, registry: OpRegistry): Shape = {
-    ShapeBuilder().withStandardIO(obj.getInputCol, obj.getOutputCol).build()
+    override def load(context: BundleContext, model: ReadableModel): StringIndexerModel = {
+      new StringIndexerModel(uid = "", labels = model.attr("labels").getStringList.toArray)
+    }
   }
 
-  override def writeAttributes(writer: AttributeWriter, obj: StringIndexerModel): Unit = {
-    writer.withAttribute(ab.stringList("labels", obj.labels))
+  override def name(node: StringIndexerModel): String = node.uid
+
+  override def model(node: StringIndexerModel): StringIndexerModel = node
+
+  override def load(context: BundleContext, node: ReadableNode, model: StringIndexerModel): StringIndexerModel = {
+    new StringIndexerModel(uid = node.name, labels = model.labels)
   }
 
-  override def read(reader: NodeReader, node: NodeDefWrapper): StringIndexerModel = {
-    new StringIndexerModel(uid = node.name,
-      labels = node.attr("labels").getStringList.toArray).
-      setInputCol(node.standardInput.name).
-      setOutputCol(node.standardOutput.name)
-  }
+  override def shape(node: StringIndexerModel): Shape = Shape().withStandardIO(node.getInputCol, node.getOutputCol)
 }

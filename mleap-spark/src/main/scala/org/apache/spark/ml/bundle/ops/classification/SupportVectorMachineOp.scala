@@ -1,10 +1,9 @@
 package org.apache.spark.ml.bundle.ops.classification
 
 import ml.bundle.Bundle
-import ml.bundle.Shape.Shape
-import ml.bundle.builder.ShapeBuilder
-import ml.bundle.serializer.{AttributeWriter, NodeOp, NodeReader, OpRegistry}
-import ml.bundle.util.NodeDefWrapper
+import ml.bundle.op.{OpModel, OpNode}
+import ml.bundle.serializer.BundleContext
+import ml.bundle.wrapper._
 import org.apache.spark.ml.mleap.classification.SVMModel
 import org.apache.spark.mllib.classification
 import org.apache.spark.mllib.linalg.Vectors
@@ -12,34 +11,36 @@ import org.apache.spark.mllib.linalg.Vectors
 /**
   * Created by hollinwilkins on 8/21/16.
   */
-object SupportVectorMachineOp extends NodeOp[SVMModel] {
-  override def opName: String = Bundle.BuiltinOps.classification.support_vector_machine
+object SupportVectorMachineOp extends OpNode[SVMModel, SVMModel] {
+  override val Model: OpModel[SVMModel] = new OpModel[SVMModel] {
+    override def opName: String = Bundle.BuiltinOps.classification.support_vector_machine
 
-  override def name(obj: SVMModel): String = obj.uid
+    override def store(context: BundleContext, model: WritableModel, obj: SVMModel): Unit = {
+      model.withAttr(Attribute.tensor("coefficients", Tensor.doubleVector(obj.model.weights.toArray.toSeq))).
+        withAttr(Attribute.double("intercept", obj.model.intercept))
 
-  override def shape(obj: SVMModel, registry: OpRegistry): Shape = {
-    ShapeBuilder().withInput(obj.getFeaturesCol, "features").
-      withOutput(obj.getPredictionCol, "prediction").
-      build()
-  }
+      for(t <- obj.model.getThreshold) { model.withAttr(Attribute.double("threshold", t)) }
+    }
 
-  override def writeAttributes(writer: AttributeWriter, obj: SVMModel): Unit = {
-    writer.withAttribute(ab.tensor("coefficients", tb.doubleVector(obj.model.weights.toArray))).
-      withAttribute(ab.double("intercept", obj.model.intercept))
-
-    for(threshold <- obj.model.getThreshold) {
-      writer.withAttribute(ab.double("threshold", threshold))
+    override def load(context: BundleContext, model: ReadableModel): SVMModel = {
+      val svm = new classification.SVMModel(weights = Vectors.dense(model.attr("coefficients").getTensor.getDoubleVector.toArray),
+        intercept = model.attr("intercept").getDouble)
+      new SVMModel(uid = "", model = svm).
+        setThreshold(model.getAttr("threshold").map(_.getDouble))
     }
   }
 
-  override def read(reader: NodeReader, node: NodeDefWrapper): SVMModel = {
-    val model = new classification.SVMModel(weights = Vectors.dense(node.attr("coefficients").getTensor.doubleVal.toArray),
-      intercept = node.attr("intercept").getDouble)
+  override def name(node: SVMModel): String = node.uid
 
-    new SVMModel(uid = node.name, model = model).
-      setThreshold(node.getAttr("threshold").map(_.getDouble)).
-      setFeaturesCol(node.input("features").name).
-      setPredictionCol(node.output("prediction").name)
+  override def model(node: SVMModel): SVMModel = node
+
+  override def load(context: BundleContext, node: ReadableNode, model: SVMModel): SVMModel = {
+    new SVMModel(uid = node.name,
+      model = model.model).copy(model.extractParamMap()).
+      setFeaturesCol(node.shape.input("features").name).
+      setPredictionCol(node.shape.output("prediction").name)
   }
 
+  override def shape(node: SVMModel): Shape = Shape().withInput(node.getFeaturesCol, "features").
+    withOutput(node.getPredictionCol, "prediction")
 }

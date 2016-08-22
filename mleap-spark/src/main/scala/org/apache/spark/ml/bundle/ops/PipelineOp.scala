@@ -1,38 +1,36 @@
 package org.apache.spark.ml.bundle.ops
 
 import ml.bundle.Bundle
-import ml.bundle.Shape.Shape
-import ml.bundle.builder.{AttributeBuilder, ShapeBuilder}
-import ml.bundle.serializer._
-import ml.bundle.util.NodeDefWrapper
+import ml.bundle.op.{OpModel, OpNode}
+import ml.bundle.serializer.{BundleContext, GraphSerializer}
+import ml.bundle.wrapper._
 import org.apache.spark.ml.{PipelineModel, Transformer}
 
 /**
   * Created by hollinwilkins on 8/21/16.
   */
-object PipelineOp extends NodeOp[PipelineModel] {
-  override def opName: String = Bundle.BuiltinOps.pipeline
+object PipelineOp extends OpNode[PipelineModel, PipelineModel] {
+  override val Model: OpModel[PipelineModel] = new OpModel[PipelineModel] {
+    override def opName: String = Bundle.BuiltinOps.pipeline
 
-  override def name(obj: PipelineModel): String = obj.uid
-
-  override def shape(obj: PipelineModel, registry: OpRegistry): Shape = {
-    val sb = ShapeBuilder()
-    for(stage <- obj.stages) {
-      val op = registry.opForAny(stage)
-      sb.withShape(op.shapeAny(stage, registry))
+    override def store(context: BundleContext, model: WritableModel, obj: PipelineModel): Unit = {
+      val nodes = GraphSerializer(context).write(obj.stages)
+      model.withAttr(Attribute.stringList("nodes", nodes))
     }
-    sb.build()
+
+    override def load(context: BundleContext, model: ReadableModel): PipelineModel = {
+      val nodes = GraphSerializer(context).read(model.attr("nodes").getStringList).map(_.asInstanceOf[Transformer]).toArray
+      new PipelineModel(uid = "", stages = nodes)
+    }
   }
 
-  override def writeAttributes(writer: AttributeWriter, obj: PipelineModel): Unit = {
-    val children = GraphSerializer(writer.path, writer.registry).write(obj.stages)
-    writer.withAttribute(ab.stringList("nodes", children))
+  override def name(node: PipelineModel): String = node.uid
+
+  override def model(node: PipelineModel): PipelineModel = node
+
+  override def load(context: BundleContext, node: ReadableNode, model: PipelineModel): PipelineModel = {
+    new PipelineModel(uid = node.name, stages = model.stages)
   }
 
-  override def read(reader: NodeReader, node: NodeDefWrapper): PipelineModel = {
-    val children = node.attr("nodes").getStringList
-    val stages = GraphSerializer(reader.path, reader.registry).read(children).map(_.asInstanceOf[Transformer])
-    new PipelineModel(uid = node.name,
-      stages = stages.toArray  )
-  }
+  override def shape(node: PipelineModel): Shape = Shape()
 }

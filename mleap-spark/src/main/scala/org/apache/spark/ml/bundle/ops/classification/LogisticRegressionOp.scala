@@ -1,53 +1,52 @@
 package org.apache.spark.ml.bundle.ops.classification
 
 import ml.bundle.Bundle
-import ml.bundle.Shape.Shape
-import ml.bundle.builder.ShapeBuilder
-import ml.bundle.serializer.{AttributeWriter, NodeOp, NodeReader, OpRegistry}
-import ml.bundle.util.NodeDefWrapper
+import ml.bundle.op.{OpModel, OpNode}
+import ml.bundle.serializer.BundleContext
+import ml.bundle.wrapper._
 import org.apache.spark.ml.classification.LogisticRegressionModel
 import org.apache.spark.ml.linalg.Vectors
 
 /**
   * Created by hollinwilkins on 8/21/16.
   */
-object LogisticRegressionOp extends NodeOp[LogisticRegressionModel] {
-  override def opName: String = Bundle.BuiltinOps.classification.logistic_regression
+object LogisticRegressionOp extends OpNode[LogisticRegressionModel, LogisticRegressionModel] {
+  override val Model: OpModel[LogisticRegressionModel] = new OpModel[LogisticRegressionModel] {
+    override def opName: String = Bundle.BuiltinOps.classification.logistic_regression
 
-  override def name(obj: LogisticRegressionModel): String = obj.uid
+    override def store(context: BundleContext, model: WritableModel, obj: LogisticRegressionModel): Unit = {
+      model.withAttr(Attribute.tensor("coefficients", Tensor.doubleVector(obj.coefficients.toArray.toSeq))).
+        withAttr(Attribute.double("intercept", obj.intercept))
 
-  override def shape(obj: LogisticRegressionModel, registry: OpRegistry): Shape = {
-    ShapeBuilder().withInput(obj.getFeaturesCol, "features").
-      withOutput(obj.getPredictionCol, "prediction").
-      build()
+      for(t <- obj.get(obj.threshold)) {
+        model.withAttr(Attribute.double("threshold", t))
+      }
+    }
+
+    override def load(context: BundleContext, model: ReadableModel): LogisticRegressionModel = {
+      val lr = new LogisticRegressionModel(uid = "",
+        coefficients = Vectors.dense(model.attr("coefficients").getTensor.getDoubleVector.toArray),
+        intercept = model.attr("intercept").getDouble)
+
+      model.getAttr("threshold").
+        map(_.getDouble).
+        map(lr.setThreshold).
+        getOrElse(lr)
+    }
   }
 
-  override def writeAttributes(writer: AttributeWriter, obj: LogisticRegressionModel): Unit = {
-    writer.withAttribute(ab.tensor("coefficients", tb.doubleVector(obj.coefficients.toArray))).
-      withAttribute(ab.double("intercept", obj.intercept))
+  override def name(node: LogisticRegressionModel): String = node.uid
 
-    for(threshold <- obj.get(obj.threshold)) {
-      writer.withAttribute(ab.double("threshold", obj.getThreshold))
-    }
+  override def model(node: LogisticRegressionModel): LogisticRegressionModel = node
 
-    for(thresholds <- obj.get(obj.thresholds)) {
-      writer.withAttribute(ab.doubleList("thresholds", thresholds))
-    }
+  override def load(context: BundleContext, node: ReadableNode, model: LogisticRegressionModel): LogisticRegressionModel = {
+    new LogisticRegressionModel(uid = node.name,
+      coefficients = model.coefficients,
+      intercept = model.intercept).copy(model.extractParamMap).
+      setFeaturesCol(node.shape.input("features").name).
+      setPredictionCol(node.shape.output("prediction").name)
   }
 
-  override def read(reader: NodeReader, node: NodeDefWrapper): LogisticRegressionModel = {
-    val m = new LogisticRegressionModel(uid = node.name,
-      coefficients = Vectors.dense(node.attr("coefficients").getTensor.doubleVal.toArray),
-      intercept = node.attr("intercept").getDouble)
-
-    for(threshold <- node.getAttr("threshold")) {
-      m.setThreshold(threshold.getDouble)
-    }
-
-    for(thresholds <- node.getAttr("thresholds")) {
-      m.setThresholds(thresholds.getDoubleList.toArray)
-    }
-
-    m
-  }
+  override def shape(node: LogisticRegressionModel): Shape = Shape().withInput(node.getFeaturesCol, "features").
+    withOutput(node.getPredictionCol, "prediction")
 }

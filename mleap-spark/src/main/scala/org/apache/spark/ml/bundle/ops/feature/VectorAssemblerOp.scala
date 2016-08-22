@@ -1,37 +1,40 @@
 package org.apache.spark.ml.bundle.ops.feature
 
 import ml.bundle.Bundle
-import ml.bundle.Shape.Shape
-import ml.bundle.builder.ShapeBuilder
-import ml.bundle.serializer.{AttributeWriter, NodeOp, NodeReader, OpRegistry}
-import ml.bundle.util.NodeDefWrapper
+import ml.bundle.op.{OpModel, OpNode}
+import ml.bundle.serializer.BundleContext
+import ml.bundle.wrapper.{ReadableModel, ReadableNode, Shape, WritableModel}
 import org.apache.spark.ml.feature.VectorAssembler
 
 /**
   * Created by hollinwilkins on 8/21/16.
   */
-object VectorAssemblerOp extends NodeOp[VectorAssembler] {
-  override def opName: String = Bundle.BuiltinOps.feature.vector_assembler
+object VectorAssemblerOp extends OpNode[VectorAssembler, VectorAssembler] {
+  override val Model: OpModel[VectorAssembler] = new OpModel[VectorAssembler] {
+    override def opName: String = Bundle.BuiltinOps.feature.vector_assembler
 
-  override def name(obj: VectorAssembler): String = obj.uid
+    override def store(context: BundleContext, model: WritableModel, obj: VectorAssembler): Unit = { }
 
-  override def shape(obj: VectorAssembler, registry: OpRegistry): Shape = {
-    val sb = ShapeBuilder().withStandardOut(obj.getOutputCol)
+    override def load(context: BundleContext, model: ReadableModel): VectorAssembler = { new VectorAssembler(uid = "") }
+  }
+
+  override def name(node: VectorAssembler): String = node.uid
+
+  override def model(node: VectorAssembler): VectorAssembler = node
+
+  override def load(context: BundleContext, node: ReadableNode, model: VectorAssembler): VectorAssembler = {
+    new VectorAssembler().
+      setInputCols(node.shape.inputs.map(_.name).toArray).
+      setOutputCol(node.shape.standardOutput.name)
+  }
+
+  override def shape(node: VectorAssembler): Shape = {
+    val s = Shape()
     var i = 0
-    for(input <- obj.getInputCols) {
-      sb.withInput(input, s"input$i")
+    for(input <- node.getInputCols) {
+      s.withInput(input, s"input$i")
       i = i + 1
     }
-    sb.build()
+    s.withStandardOutput(node.getOutputCol)
   }
-
-  override def writeAttributes(writer: AttributeWriter, obj: VectorAssembler): Unit = { }
-
-  override def read(reader: NodeReader, node: NodeDefWrapper): VectorAssembler = {
-    val inputCols = node.nodeDef.shape.inputs.map(_.name)
-    new VectorAssembler(uid = node.name).
-      setInputCols(inputCols.toArray).
-      setOutputCol(node.standardOutput.name)
-  }
-
 }

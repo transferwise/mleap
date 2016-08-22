@@ -1,17 +1,23 @@
 package org.apache.spark.ml.bundle
 
-import ml.bundle.serializer.OpRegistry
+import ml.bundle.serializer.BundleRegistry
 
 /**
   * Created by hollinwilkins on 8/21/16.
   */
 object SparkRegistry {
-  val instance: OpRegistry = create()
+  val instance: BundleRegistry = create()
 
-  def create(): OpRegistry = {
-    OpRegistry().register(ops.regression.LinearRegressionOp).
+  def create(): BundleRegistry = {
+    BundleRegistry().
+      // regressions
+      register(ops.regression.LinearRegressionOp).
+
+      // classifiers
       register(ops.classification.LogisticRegressionOp).
       register(ops.classification.SupportVectorMachineOp).
+
+      // features
       register(ops.feature.HashingTermFrequencyOp).
       register(ops.feature.OneHotEncoderOp).
       register(ops.feature.ReverseStringIndexerOp).
@@ -19,7 +25,8 @@ object SparkRegistry {
       register(ops.feature.StringIndexerOp).
       register(ops.feature.TokenizerOp).
       register(ops.feature.VectorAssemblerOp).
-      register(ops.feature.StringIndexerOp).
+
+      // other
       register(ops.PipelineOp)
   }
 }

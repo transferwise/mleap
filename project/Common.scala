@@ -4,7 +4,11 @@ import com.typesafe.sbt.pgp.PgpKeys._
 import com.trueaccord.scalapb.ScalaPbPlugin
 
 object Common {
-  val appVersion = "0.2.0-SNAPSHOT"
+  val baseAppVersion = "0.2.0"
+  val appVersion = sys.props.get("release") match {
+    case Some("true") => baseAppVersion
+    case _ => baseAppVersion + "-SNAPSHOT"
+  }
 
   val settings: Seq[Def.Setting[_]] = Seq(
     version := appVersion,
