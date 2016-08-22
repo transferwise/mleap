@@ -1,6 +1,6 @@
 package com.truecar.mleap.core.regression
 
-import com.truecar.mleap.core.linalg.Vector
+import org.apache.spark.ml.linalg.Vector
 import com.truecar.mleap.core.tree.{DecisionTree, Node}
 
 /**

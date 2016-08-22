@@ -1,6 +1,6 @@
 package com.truecar.mleap.core.feature
 
-import com.truecar.mleap.core.linalg.Vector
+import org.apache.spark.ml.linalg.{Vector, Vectors}
 
 /**
  * Created by hwilkins on 11/5/15.
@@ -18,9 +18,9 @@ case class OneHotEncoder(size: Int) extends Serializable {
     }
 
     if(label < size) {
-      Vector.sparse(size, Array(labelInt), oneValue)
+      Vectors.sparse(size, Array(labelInt), oneValue)
     } else {
-      Vector.sparse(size, emptyIndices, emptyValues)
+      Vectors.sparse(size, emptyIndices, emptyValues)
     }
   }
 }

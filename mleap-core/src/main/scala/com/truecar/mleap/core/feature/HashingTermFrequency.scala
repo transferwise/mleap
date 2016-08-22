@@ -1,6 +1,6 @@
 package com.truecar.mleap.core.feature
 
-import com.truecar.mleap.core.linalg.Vector
+import org.apache.spark.ml.linalg.{Vector, Vectors}
 
 import scala.collection.mutable
 
@@ -18,7 +18,7 @@ case class HashingTermFrequency(numFeatures: Int = 1 << 18) {
       val i = indexOf(term)
       termFrequencies.put(i, termFrequencies.getOrElse(i, 0.0) + 1.0)
     }
-    Vector.sparse(numFeatures, termFrequencies.toSeq)
+    Vectors.sparse(numFeatures, termFrequencies.toSeq)
   }
 
   /* Calculates 'x' modulo 'mod', takes to consideration sign of x,

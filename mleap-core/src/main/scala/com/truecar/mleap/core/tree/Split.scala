@@ -1,6 +1,6 @@
 package com.truecar.mleap.core.tree
 
-import com.truecar.mleap.core.linalg.Vector
+import org.apache.spark.ml.linalg.Vector
 
 /**
   * Created by hwilkins on 11/8/15.

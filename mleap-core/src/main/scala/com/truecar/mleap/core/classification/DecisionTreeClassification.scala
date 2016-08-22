@@ -1,7 +1,7 @@
 package com.truecar.mleap.core.classification
 
-import com.truecar.mleap.core.linalg.{DenseVector, Vector}
 import com.truecar.mleap.core.tree.Node
+import org.apache.spark.ml.linalg.Vector
 
 /**
   * Created by hollinwilkins on 3/30/16.

@@ -1,6 +1,6 @@
 package com.truecar.mleap.core.classification
 
-import com.truecar.mleap.core.linalg.Vector
+import org.apache.spark.ml.linalg.{Vector, Vectors}
 
 /**
   * Created by hollinwilkins on 3/30/16.
@@ -25,6 +25,6 @@ case class RandomForestClassification(trees: Seq[DecisionTreeClassification],
         }
       }
     }
-    Vector.dense(votes)
+    Vectors.dense(votes)
   }
 }

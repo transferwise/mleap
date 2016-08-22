@@ -1,6 +1,7 @@
 package com.truecar.mleap.core.classification
 
-import com.truecar.mleap.core.linalg.{BLAS, Vector}
+import org.apache.spark.ml.linalg.Vector
+import org.apache.spark.ml.linalg.mleap.BLAS
 
 
 /**

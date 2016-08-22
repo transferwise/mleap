@@ -20,8 +20,7 @@ object Dependencies {
 
   lazy val bundleMlDependencies = Seq("ml.bundle" %% "bundle-ml" % bundleMlVersion)
 
-  lazy val mleapCoreDependencies = baseDependencies.union(Seq("org.scalanlp" %% "breeze" % "0.11.2",
-    "org.scalanlp" %% "breeze-natives" % "0.11.2"))
+  lazy val mleapCoreDependencies = baseDependencies.union(Seq("org.apache.spark" %% "spark-mllib-local" % sparkVersion))
 
   lazy val mleapRuntimeDependencies = Seq()
 

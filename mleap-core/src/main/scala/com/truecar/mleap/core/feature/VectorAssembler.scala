@@ -1,6 +1,6 @@
 package com.truecar.mleap.core.feature
 
-import com.truecar.mleap.core.linalg.Vector
+import org.apache.spark.ml.linalg.{Vector, Vectors}
 
 import scala.collection.mutable
 
@@ -32,6 +32,6 @@ case class VectorAssembler() extends Serializable {
         }
         cur += vec.size
     }
-    Vector.sparse(cur, indices.result(), values.result()).compressed
+    Vectors.sparse(cur, indices.result(), values.result()).compressed
   }
 }

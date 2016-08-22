@@ -1,6 +1,6 @@
 package com.truecar.mleap.core.classification
 
-import com.truecar.mleap.core.linalg.{DenseVector, Vector}
+import org.apache.spark.ml.linalg.{DenseVector, Vector}
 
 /**
   * Created by hollinwilkins on 3/30/16.
@@ -10,8 +10,8 @@ object ProbabilisticClassification {
 
   def rawToProbability(raw: Vector): Vector = raw match {
     case raw: DenseVector =>
-      val v = raw.copy()
-      val sum = v.values.sum
+      val v = raw.copy
+      val sum = v.toArray.sum
       if (sum != 0) {
         var i = 0
         val size = v.size
