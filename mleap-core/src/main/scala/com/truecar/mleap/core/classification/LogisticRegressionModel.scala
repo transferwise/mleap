@@ -7,9 +7,9 @@ import org.apache.spark.ml.linalg.mleap.BLAS
 /**
   * Binary Logistic Regression
   */
-case class LogisticRegression(coefficients: Vector,
-                              intercept: Double,
-                              threshold: Double = 0.5) extends Serializable{
+case class LogisticRegressionModel(coefficients: Vector,
+                                   intercept: Double,
+                                   threshold: Double = 0.5) extends Serializable{
   /** Computes the mean of the response variable given the predictors. */
   private def margin(features: Vector): Double = {
     BLAS.dot(features, coefficients) + intercept

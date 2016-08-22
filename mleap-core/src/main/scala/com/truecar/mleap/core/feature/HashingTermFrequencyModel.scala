@@ -9,7 +9,7 @@ import scala.collection.mutable
   *
   * Source adapted from: Apache Spark Utils and HashingTF, see NOTICE for contributors
   */
-case class HashingTermFrequency(numFeatures: Int = 1 << 18) {
+case class HashingTermFrequencyModel(numFeatures: Int = 1 << 18) {
   def indexOf(term: Any): Int = nonNegativeMod(term.##, numFeatures)
 
   def apply(document: Iterable[_]): Vector = {

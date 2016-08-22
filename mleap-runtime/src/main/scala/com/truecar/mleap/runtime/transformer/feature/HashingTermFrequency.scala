@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.transformer.feature
 
-import com.truecar.mleap.core.feature.HashingTermFrequency
+import com.truecar.mleap.core.feature.HashingTermFrequencyModel
 import com.truecar.mleap.runtime.attribute.{AttributeGroup, AttributeSchema, CategoricalAttribute}
 import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
@@ -12,10 +12,10 @@ import scala.util.Try
 /**
   * Created by hwilkins on 12/30/15.
   */
-case class HashingTermFrequencyModel(uid: String = Transformer.uniqueName("hashing_term_frequency"),
-                                     inputCol: String,
-                                     outputCol: String,
-                                     hashingTermFrequency: HashingTermFrequency) extends Transformer {
+case class HashingTermFrequency(uid: String = Transformer.uniqueName("hashing_term_frequency"),
+                                inputCol: String,
+                                outputCol: String,
+                                hashingTermFrequency: HashingTermFrequencyModel) extends Transformer {
   override def build[TB: TransformBuilder](builder: TB): Try[TB] = {
     builder.withInput(inputCol, StringType).flatMap {
       case (b, inputIndex) =>

@@ -6,9 +6,9 @@ import org.apache.spark.ml.linalg.mleap.BLAS
 /**
   * Created by hollinwilkins on 4/14/16.
   */
-case class SupportVectorMachine(coefficients: Vector,
-                                intercept: Double,
-                                threshold: Option[Double] = None) {
+case class SupportVectorMachineModel(coefficients: Vector,
+                                     intercept: Double,
+                                     threshold: Option[Double] = None) {
   def apply(features: Vector): Double = {
     val margin = BLAS.dot(coefficients, features) + intercept
 

@@ -7,11 +7,11 @@ import scala.collection.mutable
 /**
  * Created by hwilkins on 11/5/15.
  */
-object VectorAssembler {
-  val default: VectorAssembler = VectorAssembler()
+object VectorAssemblerModel {
+  val default: VectorAssemblerModel = VectorAssemblerModel()
 }
 
-case class VectorAssembler() extends Serializable {
+case class VectorAssemblerModel() extends Serializable {
   def apply(vv: Any *): Vector = {
     val indices = mutable.ArrayBuilder.make[Int]
     val values = mutable.ArrayBuilder.make[Double]

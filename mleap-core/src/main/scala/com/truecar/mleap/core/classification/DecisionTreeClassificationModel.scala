@@ -6,9 +6,9 @@ import org.apache.spark.ml.linalg.Vector
 /**
   * Created by hollinwilkins on 3/30/16.
   */
-case class DecisionTreeClassification(rootNode: Node,
-                                      numFeatures: Int,
-                                      numClasses: Int) {
+case class DecisionTreeClassificationModel(rootNode: Node,
+                                           numFeatures: Int,
+                                           numClasses: Int) {
   def apply(features: Vector): Double = {
     ProbabilisticClassification.rawToPrediction(predictRaw(features))
   }

@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.transformer.feature
 
-import com.truecar.mleap.core.feature.OneHotEncoder
+import com.truecar.mleap.core.feature.OneHotEncoderModel
 import com.truecar.mleap.runtime.attribute.{AttributeGroup, AttributeSchema, BaseAttribute, CategoricalAttribute}
 import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
@@ -12,10 +12,10 @@ import scala.util.Try
 /**
   * Created by hollinwilkins on 5/10/16.
   */
-case class OneHotEncoderModel(uid: String = Transformer.uniqueName("one_hot_encoder"),
-                              inputCol: String,
-                              outputCol: String,
-                              model: OneHotEncoder) extends Transformer {
+case class OneHotEncoder(uid: String = Transformer.uniqueName("one_hot_encoder"),
+                         inputCol: String,
+                         outputCol: String,
+                         model: OneHotEncoderModel) extends Transformer {
   override def build[TB: TransformBuilder](builder: TB): Try[TB] = {
     builder.withInput(inputCol, DoubleType).flatMap {
       case(b, index) =>

@@ -7,7 +7,7 @@ import org.scalatest.FunSpec
   */
 class TokenizerSpec extends FunSpec {
   describe("#apply") {
-    val tokenizer = Tokenizer()
+    val tokenizer = TokenizerModel()
 
     assert(tokenizer("hello there dude").sameElements(Array("hello", "there", "dude")))
   }

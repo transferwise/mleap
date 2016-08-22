@@ -8,7 +8,7 @@ import org.scalatest.FunSpec
 class StringIndexerSpec extends FunSpec {
   describe("#apply") {
     it("returns the index of the string") {
-      val indexer = StringIndexer(Array("hello", "there", "dude"))
+      val indexer = StringIndexerModel(Array("hello", "there", "dude"))
 
       assert(indexer("hello") == 0.0)
       assert(indexer("there") == 1.0)

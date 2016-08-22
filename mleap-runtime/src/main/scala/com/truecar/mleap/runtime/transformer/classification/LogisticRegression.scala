@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.transformer.classification
 
-import com.truecar.mleap.core.classification.SupportVectorMachine
+import com.truecar.mleap.core.classification.LogisticRegressionModel
 import com.truecar.mleap.runtime.attribute.{AttributeSchema, CategoricalAttribute}
 import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
@@ -10,12 +10,12 @@ import com.truecar.mleap.runtime.types.{DoubleType, TensorType}
 import scala.util.Try
 
 /**
-  * Created by hollinwilkins on 4/14/16.
+  * Created by hwilkins on 10/22/15.
   */
-case class SupportVectorMachineModel(uid: String = Transformer.uniqueName("support_vector_machine"),
-                                     featuresCol: String,
-                                     predictionCol: String,
-                                     model: SupportVectorMachine) extends Transformer {
+case class LogisticRegression(uid: String = Transformer.uniqueName("logistic_regression"),
+                              featuresCol: String,
+                              predictionCol: String,
+                              model: LogisticRegressionModel) extends Transformer {
   override def build[TB: TransformBuilder](builder: TB): Try[TB] = {
     builder.withInput(featuresCol, TensorType.doubleVector()).flatMap {
       case(b, featuresIndex) =>

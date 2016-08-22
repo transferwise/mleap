@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.transformer.feature
 
-import com.truecar.mleap.core.feature.StringIndexer
+import com.truecar.mleap.core.feature.StringIndexerModel
 import com.truecar.mleap.runtime.attribute.{AttributeSchema, CategoricalAttribute}
 import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
@@ -12,14 +12,14 @@ import scala.util.Try
 /**
   * Created by hwilkins on 10/22/15.
   */
-case class StringIndexerModel(uid: String = Transformer.uniqueName("string_indexer"),
-                              inputCol: String,
-                              outputCol: String,
-                              indexer: StringIndexer) extends Transformer {
+case class StringIndexer(uid: String = Transformer.uniqueName("string_indexer"),
+                         inputCol: String,
+                         outputCol: String,
+                         model: StringIndexerModel) extends Transformer {
   override def build[TB: TransformBuilder](builder: TB): Try[TB] = {
     builder.withInput(inputCol).flatMap {
       case (b, inputIndex) =>
-        b.withOutput(outputCol, DoubleType)(row => indexer(row.get(inputIndex).toString))
+        b.withOutput(outputCol, DoubleType)(row => model(row.get(inputIndex).toString))
     }
   }
 
@@ -27,12 +27,12 @@ case class StringIndexerModel(uid: String = Transformer.uniqueName("string_index
     schema.withField(outputCol, CategoricalAttribute())
   }
 
-  def toReverse: ReverseStringIndexerModel = ReverseStringIndexerModel(inputCol = inputCol,
+  def toReverse: ReverseStringIndexer = ReverseStringIndexer(inputCol = inputCol,
     outputCol = outputCol,
-    indexer = indexer.toReverse)
+    indexer = model.toReverse)
 
-  def toReverse(name: String): ReverseStringIndexerModel = ReverseStringIndexerModel(uid = name,
+  def toReverse(name: String): ReverseStringIndexer = ReverseStringIndexer(uid = name,
     inputCol = inputCol,
     outputCol = outputCol,
-    indexer = indexer.toReverse)
+    indexer = model.toReverse)
 }

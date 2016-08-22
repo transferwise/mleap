@@ -5,9 +5,9 @@ import org.apache.spark.ml.linalg.{Vector, Vectors}
 /**
   * Created by hollinwilkins on 3/30/16.
   */
-case class RandomForestClassification(trees: Seq[DecisionTreeClassification],
-                                      numFeatures: Int,
-                                      numClasses: Int) {
+case class RandomForestClassificationModel(trees: Seq[DecisionTreeClassificationModel],
+                                           numFeatures: Int,
+                                           numClasses: Int) {
   def apply(features: Vector): Double = {
     ProbabilisticClassification.rawToPrediction(predictRaw(features))
   }

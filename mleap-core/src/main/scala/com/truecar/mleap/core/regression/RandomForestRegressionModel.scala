@@ -6,7 +6,7 @@ import com.truecar.mleap.core.tree.TreeEnsemble
 /**
  * Created by hwilkins on 11/8/15.
  */
-case class RandomForestRegression(trees: Seq[DecisionTreeRegression], numFeatures: Int) extends TreeEnsemble {
+case class RandomForestRegressionModel(trees: Seq[DecisionTreeRegressionModel], numFeatures: Int) extends TreeEnsemble {
   val numTrees = trees.length
 
   def apply(features: Vector): Double = predict(features)

@@ -9,7 +9,7 @@ import org.scalatest.FunSpec
 class VectorAssemblerSpec extends FunSpec {
   describe("#apply") {
     it("assembles doubles and vectors into a new vector") {
-      val assembler = VectorAssembler.default
+      val assembler = VectorAssemblerModel.default
       val expectedArray = Array(45.0, 76.8, 23.0, 45.6, 0.0, 22.3, 45.6, 0.0, 99.3)
 
       assert(assembler(45.0,

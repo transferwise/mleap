@@ -5,7 +5,7 @@ import org.apache.spark.ml.linalg.{Vector, Vectors}
 /**
  * Created by hwilkins on 11/5/15.
  */
-case class OneHotEncoder(size: Int) extends Serializable {
+case class OneHotEncoderModel(size: Int) extends Serializable {
   val oneValue = Array(1.0)
   val emptyIndices = Array[Int]()
   val emptyValues = Array[Double]()

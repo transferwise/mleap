@@ -5,8 +5,8 @@ import org.apache.spark.ml.linalg.{Vector, Vectors, SparseVector, DenseVector}
 /**
  * Created by hwilkins on 11/5/15.
  */
-case class StandardScaler(std: Option[Vector],
-                          mean: Option[Vector]) extends Serializable {
+case class StandardScalerModel(std: Option[Vector],
+                               mean: Option[Vector]) extends Serializable {
   def apply(vector: Vector): Vector = {
     (std, mean) match {
       case (None, None) => throw new Error("Need to scaled with mean and/or with stdev") // TODO: better error
