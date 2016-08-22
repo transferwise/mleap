@@ -5,7 +5,7 @@ import org.apache.spark.ml.linalg
 import org.apache.spark.ml.param._
 import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.mllib.classification
-import org.apache.spark.mllib.linalg.{Vector, Vectors}
+import org.apache.spark.mllib.linalg.{BLAS, Vector, Vectors}
 import org.apache.spark.mllib.optimization.{GradientDescent, HingeGradient, SquaredL2Updater}
 import org.apache.spark.mllib.regression.{GeneralizedLinearAlgorithm, LabeledPoint}
 import org.apache.spark.mllib.util.DataValidators
@@ -66,10 +66,10 @@ trait SVMBase extends Params {
     * Param for threshold.
     * @group param
     */
-  final val threshold: Param[Option[Double]] = new Param[Option[Double]](this, "threshold", "Threshold")
+  final val threshold: DoubleParam = new DoubleParam(this, "threshold", "Threshold")
 
   /** @group getParam */
-  final def getThreshold: Option[Double] = $(threshold)
+  final def getThreshold: Double = $(threshold)
 }
 
 class SVMModel(override val uid: String,
@@ -77,17 +77,23 @@ class SVMModel(override val uid: String,
   with SVMBase {
   def this(model: classification.SVMModel) = this(Identifiable.randomUID("svmModel"), model)
 
-  def setThreshold(value: Option[Double]): this.type = {
-    value match {
-      case Some(v) => model.setThreshold(v)
-      case None => model.clearThreshold()
-    }
+  def setThreshold(value: Double): this.type = {
+    model.setThreshold(value)
     set(threshold, value)
+  }
+  setDefault(threshold, 0.5)
+
+  def margin(features: linalg.Vector): Double = {
+    BLAS.dot(model.weights, Vectors.dense(features.toArray)) + model.intercept
+  }
+
+  protected override def predict(features: linalg.Vector): Double = {
+    if(margin(features)> getThreshold) 1.0 else 0.0
   }
 
   override protected def predictRaw(features: linalg.Vector): linalg.Vector = {
-    val margin = model.predict(Vectors.dense(features.toArray))
-    linalg.Vectors.dense(-margin, margin)
+    val m = margin(features)
+    linalg.Vectors.dense(-m, m)
   }
 
   override def numClasses: Int = 2
@@ -163,8 +169,8 @@ class SVM(override val uid: String)
   setDefault(fitIntercept, true)
 
   /** @group setParam */
-  def setThreshold(value: Option[Double]): this.type = set(threshold, value)
-  setDefault(threshold, None)
+  def setThreshold(value: Double): this.type = set(threshold, value)
+  setDefault(threshold, 0.5)
 
   override def copy(extra: ParamMap): SVM = defaultCopy(extra)
 
@@ -175,17 +181,14 @@ class SVM(override val uid: String)
         case Row(label: Double, features: linalg.Vector) => LabeledPoint(label, Vectors.dense(features.toArray))
       }
 
-    var mllibModel = new SVMWithSGD(getStepSize,
+    val mllibModel = new SVMWithSGD(getStepSize,
       getNumIterations,
       getRegParam,
-      getMiniBatchFraction)
-      .setIntercept(getFitIntercept)
-      .run(labeledPoints)
+      getMiniBatchFraction).
+      setIntercept(getFitIntercept).
+      run(labeledPoints).
+      setThreshold(getThreshold)
 
-    mllibModel = $(threshold) match {
-      case Some(t) => mllibModel.setThreshold(t)
-      case None => mllibModel
-    }
 
     new SVMModel(mllibModel)
   }

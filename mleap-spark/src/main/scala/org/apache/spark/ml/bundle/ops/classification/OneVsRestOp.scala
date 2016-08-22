@@ -11,41 +11,6 @@ import org.apache.spark.ml.classification.{ClassificationModel, OneVsRestModel}
   * Created by hollinwilkins on 8/21/16.
   */
 object OneVsRestOp extends OpNode[OneVsRestModel, OneVsRestModel] {
-
-  //  override def opName: String = Bundle.BuiltinOps.classification.one_vs_rest
-  //
-  //  override def name(obj: OneVsRestModel): String = obj.uid
-  //
-  //  override def shape(obj: OneVsRestModel, registry: BundleRegistry): Shape = {
-  //    ShapeBuilder().withInput(obj.getFeaturesCol, "features").
-  //      withOutput(obj.getPredictionCol, "prediction").
-  //      build()
-  //  }
-  //
-  //  override def writeAttributes(writer: AttributeWriter, obj: OneVsRestModel): Unit = {
-  //    val models = obj.models.map {
-  //      model =>
-  //        ModelSerializer(new File(writer.path, model.uid), writer.registry).write(model)
-  //        model.uid
-  //    }
-  //
-  //    writer.withAttribute(ab.stringList("models", models))
-  //  }
-  //
-  //  override def read(reader: NodeReader, node: NodeDefWrapper): OneVsRestModel = {
-  //    val models = node.attr("models").getStringList.map {
-  //      model =>
-  //        ModelSerializer(new File(reader.path, model), reader.registry).read().asInstanceOf[ClassificationModel[_, _]]
-  //    }
-  //
-  //    val labelMetadata = NominalAttribute.defaultAttr.
-  //      withName(node.output("prediction").name).
-  //      withNumValues(models.size).
-  //      toMetadata
-  //    new OneVsRestModel(uid = node.name,
-  //      models = models.toArray,
-  //      labelMetadata = labelMetadata)
-  //  }
   override val Model: OpModel[OneVsRestModel] = new OpModel[OneVsRestModel] {
     override def opName: String = Bundle.BuiltinOps.classification.one_vs_rest
 

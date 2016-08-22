@@ -17,16 +17,15 @@ object SupportVectorMachineOp extends OpNode[SVMModel, SVMModel] {
 
     override def store(context: BundleContext, model: WritableModel, obj: SVMModel): Unit = {
       model.withAttr(Attribute.tensor("coefficients", Tensor.doubleVector(obj.model.weights.toArray.toSeq))).
-        withAttr(Attribute.double("intercept", obj.model.intercept))
-
-      for(t <- obj.model.getThreshold) { model.withAttr(Attribute.double("threshold", t)) }
+        withAttr(Attribute.double("intercept", obj.model.intercept)).
+        withAttr(Attribute.double("threshold", obj.getThreshold))
     }
 
     override def load(context: BundleContext, model: ReadableModel): SVMModel = {
       val svm = new classification.SVMModel(weights = Vectors.dense(model.attr("coefficients").getTensor.getDoubleVector.toArray),
         intercept = model.attr("intercept").getDouble)
       new SVMModel(uid = "", model = svm).
-        setThreshold(model.getAttr("threshold").map(_.getDouble))
+        setThreshold(model.attr("threshold").getDouble)
     }
   }
 
