@@ -5,7 +5,7 @@ updateOptions := updateOptions.value.withCachedResolution(true)
 lazy val `root` = project.in(file("."))
   .settings(Common.settings)
   .settings(publishArtifact := false)
-  .aggregate(`mleap-core`, `mleap-runtime`, `mleap-spark`, `mleap-package`)
+  .aggregate(`mleap-core`, `mleap-runtime`, `mleap-spark`)
 
 lazy val `mleap-core` = project.in(file("mleap-core"))
   .settings(Common.settings)
@@ -22,8 +22,3 @@ lazy val `mleap-spark` = project.in(file("mleap-spark"))
   .settings(Common.settings)
   .settings(Common.sonatypeSettings)
   .settings(libraryDependencies ++= Dependencies.mleapSparkDependencies)
-
-lazy val `mleap-package` = project
-  .settings(Common.settings)
-  .settings(Common.sonatypeSettings)
-  .dependsOn(`mleap-spark`)
