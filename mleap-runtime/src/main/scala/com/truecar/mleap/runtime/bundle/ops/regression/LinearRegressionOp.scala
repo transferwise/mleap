@@ -1,4 +1,4 @@
-package com.truecar.mleap.runtime.bundle.regression
+package com.truecar.mleap.runtime.bundle.ops.regression
 
 import com.truecar.mleap.core.regression.LinearRegressionModel
 import com.truecar.mleap.runtime.transformer.regression.LinearRegression

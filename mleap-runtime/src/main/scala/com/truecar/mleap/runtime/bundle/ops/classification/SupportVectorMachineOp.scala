@@ -1,4 +1,4 @@
-package com.truecar.mleap.runtime.bundle.classification
+package com.truecar.mleap.runtime.bundle.ops.classification
 
 import com.truecar.mleap.core.classification.SupportVectorMachineModel
 import com.truecar.mleap.runtime.transformer.classification.SupportVectorMachine

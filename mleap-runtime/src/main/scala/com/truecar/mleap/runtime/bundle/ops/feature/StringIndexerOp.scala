@@ -1,4 +1,4 @@
-package com.truecar.mleap.runtime.bundle.feature
+package com.truecar.mleap.runtime.bundle.ops.feature
 
 import com.truecar.mleap.core.feature.StringIndexerModel
 import com.truecar.mleap.runtime.transformer.feature.StringIndexer
