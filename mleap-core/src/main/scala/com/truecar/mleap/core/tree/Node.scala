@@ -5,20 +5,13 @@ import org.apache.spark.ml.linalg.Vector
 /**
   * Created by hwilkins on 11/8/15.
   */
-object Node {
-  val leafNodeName = "LeafNode"
-  val internalNodeName = "InternalNode"
-}
-
 sealed trait Node extends Serializable {
   def prediction: Double
-  def impurity: Double
 
   def predictImpl(features: Vector): LeafNode
 }
 
 final case class LeafNode(prediction: Double,
-                          impurity: Double,
                           impurityStats: Option[Vector] = None) extends Node {
   override def predictImpl(features: Vector): LeafNode = this
 }

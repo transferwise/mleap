@@ -5,11 +5,6 @@ import org.apache.spark.ml.linalg.Vector
 /**
   * Created by hwilkins on 11/8/15.
   */
-object Split {
-  val categoricalSplitName = "CategoricalSplit"
-  val continuousSplitName = "ContinuousSplit"
-}
-
 sealed trait Split extends Serializable {
   def featureIndex: Int
 
