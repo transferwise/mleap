@@ -1,7 +1,8 @@
-package com.truecar.mleap.runtime.transformer
+package com.truecar.mleap.runtime.transformer.feature
 
 import com.truecar.mleap.core.feature.VectorAssembler
 import com.truecar.mleap.runtime.attribute.{AttributeGroup, AttributeSchema, BaseAttribute}
+import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder.Ops
 import com.truecar.mleap.runtime.types.TensorType
@@ -32,7 +33,7 @@ case class VectorAssemblerModel(uid: String = Transformer.uniqueName("vector_ass
   }
 
   override def transformAttributeSchema(schema: AttributeSchema): AttributeSchema = {
-    val attrs: Array[BaseAttribute] = inputCols.toArray.map(col => schema(col)).flatMap {
+    val attrs: Array[BaseAttribute] = inputCols.map(col => schema(col)).flatMap {
       case AttributeGroup(groupAttrs) => groupAttrs: Array[BaseAttribute]
       case attr: BaseAttribute => Array(attr): Array[BaseAttribute]
       case _ =>

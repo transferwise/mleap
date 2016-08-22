@@ -22,7 +22,7 @@ object Dependencies {
 
   lazy val mleapCoreDependencies = baseDependencies.union(Seq("org.apache.spark" %% "spark-mllib-local" % sparkVersion))
 
-  lazy val mleapRuntimeDependencies = Seq()
+  lazy val mleapRuntimeDependencies = bundleMlDependencies
 
   lazy val mleapSerializationDependencies = bundleMlDependencies
 

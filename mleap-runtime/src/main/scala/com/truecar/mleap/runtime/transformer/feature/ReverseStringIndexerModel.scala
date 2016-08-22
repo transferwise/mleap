@@ -1,10 +1,11 @@
-package com.truecar.mleap.runtime.transformer
+package com.truecar.mleap.runtime.transformer.feature
 
 import com.truecar.mleap.core.feature.ReverseStringIndexer
 import com.truecar.mleap.runtime.attribute.{AttributeSchema, CategoricalAttribute}
+import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
-import com.truecar.mleap.runtime.types.StringType
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder.Ops
+import com.truecar.mleap.runtime.types.StringType
 
 import scala.util.Try
 

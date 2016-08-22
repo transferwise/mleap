@@ -1,10 +1,11 @@
-package com.truecar.mleap.runtime.transformer
+package com.truecar.mleap.runtime.transformer.feature
 
 import com.truecar.mleap.core.feature.StandardScaler
 import com.truecar.mleap.runtime.attribute.AttributeSchema
+import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
-import com.truecar.mleap.runtime.types.TensorType
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder.Ops
+import com.truecar.mleap.runtime.types.TensorType
 
 import scala.util.Try
 
