@@ -14,9 +14,6 @@ trait TransformBuilder[T] extends Serializable {
 
   def withOutput(t: T, name: String, dataType: DataType)
                 (o: (Row) => Any): Try[T]
-
-  def withSelect(t: T, fieldNames: Seq[String]): Try[T]
-  def withDrop(t: T, name: String): Try[T]
 }
 
 object TransformBuilder {
@@ -32,13 +29,6 @@ object TransformBuilder {
     def withOutput(name: String, dataType: DataType)
                                        (o: (Row) => Any): Try[T] = {
       implicitly[TransformBuilder[T]].withOutput(t, name, dataType)(o)
-    }
-
-    def withSelect(fieldNames: Seq[String]): Try[T] = {
-      implicitly[TransformBuilder[T]].withSelect(t, fieldNames)
-    }
-    def withDrop(name: String): Try[T] = {
-      implicitly[TransformBuilder[T]].withDrop(t, name)
     }
   }
 }
