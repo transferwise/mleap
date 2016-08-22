@@ -1,10 +1,10 @@
 package com.truecar.mleap.runtime.transformer
 
 import com.truecar.mleap.core.feature.VectorAssembler
-import com.truecar.mleap.runtime.attribute.{BaseAttribute, AttributeGroup, AttributeSchema}
+import com.truecar.mleap.runtime.attribute.{AttributeGroup, AttributeSchema, BaseAttribute}
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
-import com.truecar.mleap.runtime.types.{StructType, VectorType}
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder.Ops
+import com.truecar.mleap.runtime.types.TensorType
 
 import scala.util.Try
 
@@ -27,7 +27,7 @@ case class VectorAssemblerModel(uid: String = Transformer.uniqueName("vector_ass
       }
     }.flatMap {
       case (b, indices) =>
-        b.withOutput(outputCol, VectorType)(row => assembler(indices.map(row.get): _*))
+        b.withOutput(outputCol, TensorType.doubleVector())(row => assembler(indices.map(row.get): _*))
     }
   }
 

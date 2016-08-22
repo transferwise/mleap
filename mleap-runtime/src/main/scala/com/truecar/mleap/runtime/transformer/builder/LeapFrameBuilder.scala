@@ -20,7 +20,7 @@ object LeapFrameBuilder {
         val schema = LeapFrame.schema(t.frame)
         schema.getField(name) match {
           case Some(field) =>
-            if(field.dataType == dataType) {
+            if(field.dataType.fits(dataType)) {
               Success(t, schema.indexOf(name))
             } else {
               Failure(new Error(s"Field $name expected data type ${field.dataType} but found $dataType"))

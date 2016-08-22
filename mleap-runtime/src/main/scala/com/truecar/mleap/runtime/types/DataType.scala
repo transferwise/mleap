@@ -1,40 +1,38 @@
 package com.truecar.mleap.runtime.types
 
-import DataType._
-
 /**
  * Created by hwilkins on 10/23/15.
  */
-object DataType {
-  val doubleTypeName = "double"
-  val stringTypeName = "string"
-  val vectorTypeName = "vector"
-  val stringArrayTypeName = "stringArray"
+sealed trait DataType extends Serializable {
+  def fits(other: DataType): Boolean = this == other
+}
+sealed trait BasicType extends Serializable
 
-  def fromName(name: String): DataType = name match {
-    case `doubleTypeName` => DoubleType
-    case `stringTypeName` => StringType
-    case `vectorTypeName` => VectorType
-    case `stringArrayTypeName` => StringArrayType
+object LongType extends DataType with BasicType
+object BooleanType extends DataType with BasicType
+object DoubleType extends DataType with BasicType
+object StringType extends DataType with BasicType
+case class TensorType(base: BasicType, dimensions: Seq[Int]) extends DataType {
+  override def fits(other: DataType): Boolean = {
+    if(super.fits(other)) { return true }
+
+    other match {
+      case TensorType(ob, od) => base == ob && dimFit(od)
+      case _ => false
+    }
+  }
+
+  private def dimFit(d2: Seq[Int]): Boolean = {
+    if(dimensions.length == d2.length) {
+      for((dd1, dd2) <- dimensions.zip(d2)) {
+        if(dd1 != -1 && dd1 != dd2) { return false }
+      }
+      true
+    } else { false }
   }
 }
+case class ListType(base: BasicType) extends DataType
 
-sealed trait DataType extends Serializable {
-  def typeName: String
-}
-
-object DoubleType extends DataType {
-  override def typeName: String = doubleTypeName
-}
-
-object StringType extends DataType {
-  override def typeName: String = stringTypeName
-}
-
-object VectorType extends DataType {
-  override def typeName: String = vectorTypeName
-}
-
-object StringArrayType extends DataType {
-  override def typeName: String = stringArrayTypeName
+object TensorType {
+  def doubleVector(dim: Int = -1): TensorType = TensorType(DoubleType, Seq(dim))
 }

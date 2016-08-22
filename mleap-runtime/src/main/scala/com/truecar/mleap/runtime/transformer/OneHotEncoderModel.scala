@@ -4,7 +4,7 @@ import com.truecar.mleap.core.feature.OneHotEncoder
 import com.truecar.mleap.runtime.attribute.{AttributeGroup, AttributeSchema, BaseAttribute, CategoricalAttribute}
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder.Ops
-import com.truecar.mleap.runtime.types.{DoubleType, VectorType}
+import com.truecar.mleap.runtime.types.{DoubleType, TensorType}
 
 import scala.util.Try
 
@@ -18,7 +18,7 @@ case class OneHotEncoderModel(uid: String = Transformer.uniqueName("one_hot_enco
   override def build[TB: TransformBuilder](builder: TB): Try[TB] = {
     builder.withInput(inputCol, DoubleType).flatMap {
       case(b, index) =>
-        b.withOutput(outputCol, VectorType)(row => model(row.getDouble(index)))
+        b.withOutput(outputCol, TensorType.doubleVector())(row => model(row.getDouble(index)))
     }
   }
 

@@ -3,7 +3,7 @@ package com.truecar.mleap.runtime.transformer
 import com.truecar.mleap.core.feature.StandardScaler
 import com.truecar.mleap.runtime.attribute.AttributeSchema
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
-import com.truecar.mleap.runtime.types.VectorType
+import com.truecar.mleap.runtime.types.TensorType
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder.Ops
 
 import scala.util.Try
@@ -16,9 +16,9 @@ case class StandardScalerModel(uid: String = Transformer.uniqueName("standard_sc
                                outputCol: String,
                                scaler: StandardScaler) extends Transformer {
   override def build[TB: TransformBuilder](builder: TB): Try[TB] = {
-    builder.withInput(inputCol, VectorType).flatMap {
+    builder.withInput(inputCol, TensorType.doubleVector()).flatMap {
       case (b, inputIndex) =>
-        b.withOutput(outputCol, VectorType)(row => scaler(row.getVector(inputIndex)))
+        b.withOutput(outputCol, TensorType.doubleVector())(row => scaler(row.getVector(inputIndex)))
     }
   }
 

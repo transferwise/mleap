@@ -3,7 +3,7 @@ package com.truecar.mleap.runtime.transformer
 import com.truecar.mleap.core.classification.SupportVectorMachine
 import com.truecar.mleap.runtime.attribute.{AttributeSchema, CategoricalAttribute}
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
-import com.truecar.mleap.runtime.types.{DoubleType, VectorType}
+import com.truecar.mleap.runtime.types.{DoubleType, TensorType}
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder.Ops
 
 import scala.util.Try
@@ -16,7 +16,7 @@ case class SupportVectorMachineModel(uid: String = Transformer.uniqueName("suppo
                                      predictionCol: String,
                                      model: SupportVectorMachine) extends Transformer {
   override def build[TB: TransformBuilder](builder: TB): Try[TB] = {
-    builder.withInput(featuresCol, VectorType).flatMap {
+    builder.withInput(featuresCol, TensorType.doubleVector()).flatMap {
       case(b, featuresIndex) =>
         b.withOutput(predictionCol, DoubleType)(row => model(row.getVector(featuresIndex)))
     }
