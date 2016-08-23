@@ -6,12 +6,12 @@ package com.truecar.mleap.runtime.types
 sealed trait DataType extends Serializable {
   def fits(other: DataType): Boolean = this == other
 }
-sealed trait BasicType extends Serializable
+sealed trait BasicType extends DataType with Serializable
 
-object LongType extends DataType with BasicType
-object BooleanType extends DataType with BasicType
-object DoubleType extends DataType with BasicType
-object StringType extends DataType with BasicType
+object LongType extends BasicType
+object BooleanType extends BasicType
+object DoubleType extends BasicType
+object StringType extends BasicType
 case class TensorType(base: BasicType, dimensions: Seq[Int]) extends DataType {
   override def fits(other: DataType): Boolean = {
     if(super.fits(other)) { return true }
