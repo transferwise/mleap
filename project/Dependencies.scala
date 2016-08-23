@@ -21,4 +21,6 @@ case class Dependencies(version: String) {
 
   lazy val mleapSparkDependencies = sparkDependencies
     .union(bundleMlDependencies)
+
+  lazy val mleapCsvDependencies = Seq("com.univocity" % "univocity-parsers" % "2.2.1")
 }
