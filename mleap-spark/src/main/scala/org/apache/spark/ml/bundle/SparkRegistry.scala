@@ -12,10 +12,14 @@ object SparkRegistry {
     BundleRegistry().
       // regressions
       register(ops.regression.LinearRegressionOp).
+      register(ops.regression.DecisionTreeRegressionOp).
+      register(ops.regression.RandomForestRegressionOp).
 
       // classifiers
       register(ops.classification.LogisticRegressionOp).
       register(ops.classification.SupportVectorMachineOp).
+      register(ops.classification.DecisionTreeClassifierOp).
+      register(ops.classification.RandomForestClassifierOp).
 
       // features
       register(ops.feature.HashingTermFrequencyOp).

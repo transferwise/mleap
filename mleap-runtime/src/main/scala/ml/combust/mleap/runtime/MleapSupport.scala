@@ -1,32 +1,32 @@
-package org.apache.spark.ml.mleap
+package ml.combust.mleap.runtime
 
 import java.io.File
 
+import ml.combust.mleap.runtime.bundle.MleapRegistry
+import ml.combust.mleap.runtime.transformer.{Pipeline, Transformer}
 import ml.bundle.Bundle
 import ml.bundle.serializer.{BundleContext, BundleRegistry, BundleSerializer}
 import ml.bundle.wrapper.AttributeList
-import org.apache.spark.ml.bundle.SparkRegistry
-import org.apache.spark.ml.{PipelineModel, Transformer}
 
 /**
   * Created by hollinwilkins on 8/22/16.
   */
-trait SparkSupport {
-  implicit val sparkRegistry: BundleRegistry = SparkRegistry.instance
+object MleapSupport {
+  implicit val mleapRegistry: BundleRegistry = MleapRegistry.instance
 
   implicit class TransformerOps(transformer: Transformer) {
     def serializeToBundle(path: File,
                           list: Option[AttributeList] = None)
                          (implicit registry: BundleRegistry): Unit = {
-      SparkBundle.writeTransformer(transformer, path, list)(registry)
+      MleapBundle.writeTransformer(transformer, path, list)(registry)
     }
   }
 
-  object SparkBundle {
+  object MleapBundle {
     def readTransformerGraph(path: File)
-                            (implicit registry: BundleRegistry): PipelineModel = {
+                            (implicit registry: BundleRegistry): Pipeline = {
       val bundle = BundleSerializer(BundleContext(registry, path)).read()
-      new PipelineModel(uid = bundle.info.name, stages = bundle.nodes.map(_.asInstanceOf[Transformer]).toArray)
+      Pipeline(uid = bundle.info.name, transformers = bundle.nodes.map(_.asInstanceOf[Transformer]))
     }
 
     def readTransformer(path: File)
@@ -35,15 +35,15 @@ trait SparkSupport {
       if(bundle.nodes.length == 1) {
         bundle.nodes.head.asInstanceOf[Transformer]
       } else {
-        new PipelineModel(uid = bundle.info.name, stages = bundle.nodes.map(_.asInstanceOf[Transformer]).toArray)
+        Pipeline(uid = bundle.info.name, transformers = bundle.nodes.map(_.asInstanceOf[Transformer]))
       }
     }
 
-    def writeTransformerGraph(graph: PipelineModel,
+    def writeTransformerGraph(graph: Pipeline,
                               path: File,
                               list: Option[AttributeList] = None)
                              (implicit registry: BundleRegistry): Unit = {
-      val bundle = Bundle.createBundle(graph.uid, graph.stages, list)
+      val bundle = Bundle.createBundle(graph.uid, graph.transformers, list)
       BundleSerializer(BundleContext(registry, path)).write(bundle)
     }
 
@@ -52,7 +52,7 @@ trait SparkSupport {
                          list: Option[AttributeList] = None)
                         (implicit registry: BundleRegistry): Unit = {
       transformer match {
-        case transformer: PipelineModel => writeTransformerGraph(transformer, path, list)(registry)
+        case transformer: Pipeline => writeTransformerGraph(transformer, path, list)(registry)
         case _ =>
           val bundle = Bundle.createBundle(transformer.uid, Seq(transformer), list)
           BundleSerializer(BundleContext(registry, path)).write(bundle)
@@ -60,4 +60,3 @@ trait SparkSupport {
     }
   }
 }
-object SparkSupport extends SparkSupport
