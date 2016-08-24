@@ -20,6 +20,7 @@ object SparkRegistry {
       register(ops.classification.SupportVectorMachineOp).
       register(ops.classification.DecisionTreeClassifierOp).
       register(ops.classification.RandomForestClassifierOp).
+      register(ops.classification.OneVsRestOp).
 
       // features
       register(ops.feature.HashingTermFrequencyOp).
