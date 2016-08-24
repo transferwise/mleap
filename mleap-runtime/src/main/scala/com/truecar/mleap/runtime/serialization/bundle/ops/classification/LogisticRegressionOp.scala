@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.serialization.bundle.ops.classification
 
-import com.truecar.mleap.classification.LogisticRegressionModel
+import com.truecar.mleap.core.classification.LogisticRegressionModel
 import com.truecar.mleap.runtime.transformer.classification.LogisticRegression
 import ml.bundle.Bundle
 import ml.bundle.op.{OpModel, OpNode}

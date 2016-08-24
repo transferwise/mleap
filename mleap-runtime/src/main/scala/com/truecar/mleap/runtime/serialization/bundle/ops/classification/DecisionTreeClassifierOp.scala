@@ -1,7 +1,7 @@
 package com.truecar.mleap.runtime.serialization.bundle.ops.classification
 
-import com.truecar.mleap.classification.DecisionTreeClassifierModel
-import com.truecar.mleap.tree.Node
+import com.truecar.mleap.core.classification.DecisionTreeClassifierModel
+import com.truecar.mleap.core.tree.Node
 import com.truecar.mleap.runtime.serialization.bundle.tree.MleapNodeWrapper
 import com.truecar.mleap.runtime.transformer.classification.DecisionTreeClassifier
 import ml.bundle.Bundle

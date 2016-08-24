@@ -1,7 +1,7 @@
 package com.truecar.mleap.runtime.serialization.bundle.ops.regression
 
-import com.truecar.mleap.regression.DecisionTreeRegressionModel
-import com.truecar.mleap.tree.Node
+import com.truecar.mleap.core.regression.DecisionTreeRegressionModel
+import com.truecar.mleap.core.tree.Node
 import com.truecar.mleap.runtime.serialization.bundle.tree.MleapNodeWrapper
 import com.truecar.mleap.runtime.transformer.regression.DecisionTreeRegression
 import ml.bundle.Bundle

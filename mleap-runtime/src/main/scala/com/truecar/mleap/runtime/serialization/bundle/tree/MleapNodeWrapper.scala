@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.serialization.bundle.tree
 
-import com.truecar.mleap.tree
+import com.truecar.mleap.core.tree
 import ml.bundle.tree.Split.Split
 import ml.bundle.tree.Split.Split.{CategoricalSplit, ContinuousSplit}
 import ml.bundle.tree.Node.Node
@@ -11,30 +11,30 @@ import org.apache.spark.ml.linalg.Vectors
 /**
   * Created by hollinwilkins on 8/22/16.
   */
-object MleapNodeWrapper extends NodeWrapper[tree.Node] {
-  override def node(node: tree.Node, withImpurities: Boolean): Node = node match {
-    case node: tree.InternalNode =>
+object MleapNodeWrapper extends NodeWrapper[com.truecar.mleap.core.tree.Node] {
+  override def node(node: com.truecar.mleap.core.tree.Node, withImpurities: Boolean): Node = node match {
+    case node: com.truecar.mleap.core.tree.InternalNode =>
       val split = node.split match {
-        case split: tree.CategoricalSplit =>
+        case split: com.truecar.mleap.core.tree.CategoricalSplit =>
           Split(Split.S.Categorical(CategoricalSplit(featureIndex = split.featureIndex,
             isLeft = split.isLeft,
             numCategories = split.numCategories,
             categories = split.categories)))
-        case split: tree.ContinuousSplit =>
+        case split: com.truecar.mleap.core.tree.ContinuousSplit =>
           Split(Split.S.Continuous(ContinuousSplit(featureIndex = split.featureIndex,
             threshold = split.threshold)))
       }
       Node(Node.N.Internal(Node.InternalNode(split)))
-    case node: tree.LeafNode =>
+    case node: com.truecar.mleap.core.tree.LeafNode =>
       val impurities = if(withImpurities) {
         node.impurities.get.toArray.toSeq
       } else { Seq() }
       Node(Node.N.Leaf(Node.LeafNode(node.prediction, impurities)))
   }
 
-  override def isInternal(node: tree.Node): Boolean = node.isInstanceOf[tree.InternalNode]
+  override def isInternal(node: com.truecar.mleap.core.tree.Node): Boolean = node.isInstanceOf[com.truecar.mleap.core.tree.InternalNode]
 
-  override def leaf(node: LeafNode, withImpurities: Boolean): tree.Node = {
+  override def leaf(node: LeafNode, withImpurities: Boolean): com.truecar.mleap.core.tree.Node = {
     val impurities = if(withImpurities) {
       Some(Vectors.dense(node.impurities.toArray))
     } else {
@@ -46,8 +46,8 @@ object MleapNodeWrapper extends NodeWrapper[tree.Node] {
   }
 
   override def internal(node: InternalNode,
-                        left: tree.Node,
-                        right: tree.Node): tree.Node = {
+                        left: com.truecar.mleap.core.tree.Node,
+                        right: com.truecar.mleap.core.tree.Node): com.truecar.mleap.core.tree.Node = {
     val split = if(node.split.s.isCategorical) {
       val s = node.split.getCategorical
       tree.CategoricalSplit(featureIndex = s.featureIndex,
@@ -65,13 +65,13 @@ object MleapNodeWrapper extends NodeWrapper[tree.Node] {
       right = right)
   }
 
-  override def left(node: tree.Node): tree.Node = node match {
-    case node: tree.InternalNode => node.left
+  override def left(node: com.truecar.mleap.core.tree.Node): com.truecar.mleap.core.tree.Node = node match {
+    case node: com.truecar.mleap.core.tree.InternalNode => node.left
     case _ => throw new Error("not an internal node") // TODO: better error
   }
 
-  override def right(node: tree.Node): tree.Node = node match {
-    case node: tree.InternalNode => node.right
+  override def right(node: com.truecar.mleap.core.tree.Node): com.truecar.mleap.core.tree.Node = node match {
+    case node: com.truecar.mleap.core.tree.InternalNode => node.right
     case _ => throw new Error("not an internal node") // TODO: better error
   }
 }

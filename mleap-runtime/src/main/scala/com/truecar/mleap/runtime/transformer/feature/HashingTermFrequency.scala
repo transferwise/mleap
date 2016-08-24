@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.transformer.feature
 
-import com.truecar.mleap.feature.HashingTermFrequencyModel
+import com.truecar.mleap.core.feature.HashingTermFrequencyModel
 import com.truecar.mleap.runtime.attribute.{AttributeGroup, AttributeSchema, CategoricalAttribute}
 import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder

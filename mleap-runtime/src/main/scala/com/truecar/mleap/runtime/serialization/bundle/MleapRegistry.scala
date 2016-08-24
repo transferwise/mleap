@@ -19,6 +19,7 @@ object MleapRegistry {
     // feature
     register(ops.feature.StandardScalerOp).
     register(ops.feature.StringIndexerOp).
+    register(ops.feature.ReverseStringIndexerOp).
     register(ops.feature.VectorAssemblerOp).
     // regression
     register(ops.regression.LinearRegressionOp).

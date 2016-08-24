@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.transformer.feature
 
-import com.truecar.mleap.feature.StandardScalerModel
+import com.truecar.mleap.core.feature.StandardScalerModel
 import com.truecar.mleap.runtime.attribute.AttributeSchema
 import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder

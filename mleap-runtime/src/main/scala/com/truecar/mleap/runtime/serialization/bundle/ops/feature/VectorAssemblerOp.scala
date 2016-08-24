@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.serialization.bundle.ops.feature
 
-import com.truecar.mleap.feature.VectorAssemblerModel
+import com.truecar.mleap.core.feature.VectorAssemblerModel
 import com.truecar.mleap.runtime.transformer.feature.VectorAssembler
 import ml.bundle.Bundle
 import ml.bundle.op.{OpModel, OpNode}

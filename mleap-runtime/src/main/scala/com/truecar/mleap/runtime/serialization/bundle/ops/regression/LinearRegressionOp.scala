@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.serialization.bundle.ops.regression
 
-import com.truecar.mleap.regression.LinearRegressionModel
+import com.truecar.mleap.core.regression.LinearRegressionModel
 import com.truecar.mleap.runtime.transformer.regression.LinearRegression
 import ml.bundle.Bundle
 import ml.bundle.op.{OpModel, OpNode}

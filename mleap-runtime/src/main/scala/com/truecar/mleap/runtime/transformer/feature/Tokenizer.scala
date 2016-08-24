@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.transformer.feature
 
-import com.truecar.mleap.feature.TokenizerModel
+import com.truecar.mleap.core.feature.TokenizerModel
 import com.truecar.mleap.runtime.attribute.{AttributeSchema, OtherAttribute}
 import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder

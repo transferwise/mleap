@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.transformer.feature
 
-import com.truecar.mleap.feature.StringIndexerModel
+import com.truecar.mleap.core.feature.StringIndexerModel
 import com.truecar.mleap.runtime.attribute.{AttributeSchema, CategoricalAttribute}
 import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder
@@ -29,10 +29,10 @@ case class StringIndexer(uid: String = Transformer.uniqueName("string_indexer"),
 
   def toReverse: ReverseStringIndexer = ReverseStringIndexer(inputCol = inputCol,
     outputCol = outputCol,
-    indexer = model.toReverse)
+    model = model.toReverse)
 
   def toReverse(name: String): ReverseStringIndexer = ReverseStringIndexer(uid = name,
     inputCol = inputCol,
     outputCol = outputCol,
-    indexer = model.toReverse)
+    model = model.toReverse)
 }

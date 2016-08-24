@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.serialization.bundle.ops.classification
 
-import com.truecar.mleap.classification.{ClassificationModel, OneVsRestModel}
+import com.truecar.mleap.core.classification.{ClassificationModel, OneVsRestModel}
 import com.truecar.mleap.runtime.transformer.classification.OneVsRest
 import ml.bundle.Bundle
 import ml.bundle.op.{OpModel, OpNode}

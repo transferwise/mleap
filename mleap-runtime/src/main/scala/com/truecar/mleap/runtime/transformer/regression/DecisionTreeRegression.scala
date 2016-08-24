@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.transformer.regression
 
-import com.truecar.mleap.regression.DecisionTreeRegressionModel
+import com.truecar.mleap.core.regression.DecisionTreeRegressionModel
 import com.truecar.mleap.runtime.attribute.{AttributeSchema, ContinuousAttribute}
 import com.truecar.mleap.runtime.transformer.Transformer
 import com.truecar.mleap.runtime.transformer.builder.TransformBuilder

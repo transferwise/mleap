@@ -1,6 +1,6 @@
 package com.truecar.mleap.runtime.serialization.bundle.ops.classification
 
-import com.truecar.mleap.classification.{DecisionTreeClassifierModel, RandomForestClassifierModel}
+import com.truecar.mleap.core.classification.{DecisionTreeClassifierModel, RandomForestClassifierModel}
 import com.truecar.mleap.runtime.serialization.bundle.tree.MleapNodeWrapper
 import com.truecar.mleap.runtime.transformer.classification.RandomForestClassifier
 import ml.bundle.Bundle
