@@ -29,7 +29,7 @@ object OneVsRestOp extends OpNode[OneVsRest, OneVsRestModel] {
     override def load(context: BundleContext, model: ReadableModel): OneVsRestModel = {
       val numClasses = model.attr("num_classes").getLong.toInt
 
-      val models = (0 to numClasses).toArray.map {
+      val models = (0 until numClasses).toArray.map {
         i => ModelSerializer(context.context(s"model$i")).read().asInstanceOf[ClassificationModel]
       }
 
