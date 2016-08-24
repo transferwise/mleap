@@ -22,5 +22,7 @@ object MleapRegistry {
     // regression
     register(ops.regression.LinearRegressionOp).
     register(ops.regression.DecisionTreeRegressionOp).
-    register(ops.regression.RandomForestRegressionOp)
+    register(ops.regression.RandomForestRegressionOp).
+    // other
+    register(ops.PipelineOp)
 }
