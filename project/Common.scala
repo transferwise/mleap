@@ -14,7 +14,7 @@ object Common {
     version := appVersion,
     scalaVersion := "2.11.7",
     crossScalaVersions := Seq("2.10.6", "2.11.7"),
-    organization := "ml.combust.mleap",
+    organization := "com.truecar.mleap",
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
     resolvers ++= {
       // Only add Sonatype Snapshots if this version itself is a snapshot version
@@ -38,9 +38,9 @@ object Common {
     publishArtifact in Test := false,
     pomIncludeRepository := { _ => false },
     licenses := Seq("Apache 2.0 License" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
-    homepage := Some(url("https://github.com/combust-ml/mleap")),
-    scmInfo := Some(ScmInfo(url("https://github.com/combust-ml/mleap.git"),
-      "scm:git:git@github.com:combust-ml/mleap.git")),
+    homepage := Some(url("https://github.com/TrueCar/mleap")),
+    scmInfo := Some(ScmInfo(url("https://github.com/TrueCar/mleap.git"),
+      "scm:git:git@github.com:TrueCar/mleap.git")),
     developers := List(Developer("hollinwilkins",
       "Hollin Wilkins",
       "hollinrwilkins@gmail.com",

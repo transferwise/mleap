@@ -19,14 +19,14 @@ MLeap is cross-compiled for Scala 2.10 and 2.11, so just replace 2.10 with 2.11 
 #### SBT
 
 ```
-libraryDependencies += "ml.combust.mleap" %% "mleap-runtime" % "0.1.4"
+libraryDependencies += "com.truecar.mleap" %% "mleap-runtime" % "0.1.4"
 ```
 
 #### Maven
 
 ```
 <dependency>
-    <groupId>ml.combust.mleap</groupId>
+    <groupId>com.truecar.mleap</groupId>
     <artifactId>mleap-runtime_2.10</artifactId>
     <version>0.1.4</version>
 </dependency>
@@ -37,14 +37,14 @@ libraryDependencies += "ml.combust.mleap" %% "mleap-runtime" % "0.1.4"
 #### SBT
 
 ```
-libraryDependencies += "ml.combust.mleap" %% "mleap-spark" % "0.1.4"
+libraryDependencies += "com.truecar.mleap" %% "mleap-spark" % "0.1.4"
 ```
 
 #### Maven
 
 ```
 <dependency>
-    <groupId>ml.combust.mleap</groupId>
+    <groupId>com.truecar.mleap</groupId>
     <artifactId>mleap-spark_2.10</artifactId>
     <version>0.1.4</version>
 </dependency>
@@ -52,10 +52,10 @@ libraryDependencies += "ml.combust.mleap" %% "mleap-spark" % "0.1.4"
 
 ### Spark Packages
 
-MLeap is now a [Spark Package](http://spark-packages.org/package/CombustML/mleap). The package includes `mleap-spark` and `mleap-serialization`, so you should have full functionality with it. Here is how you can run a Spark shell with MLeap loaded.
+MLeap is now a [Spark Package](http://spark-packages.org/package/TrueCar/mleap). The package includes `mleap-spark` and `mleap-serialization`, so you should have full functionality with it. Here is how you can run a Spark shell with MLeap loaded.
 
 ```bash
-$ bin/spark-shell --packages ml.combust.mleap:mleap-package_2.10:0.1.4
+$ bin/spark-shell --packages com.truecar.mleap:mleap-package_2.10:0.2.0
 ```
 
 ## Modules
@@ -69,7 +69,7 @@ MLeap is broken into 4 modules:
 
 ## Example
 
-Please see the [mleap-demo](https://github.com/combust-ml/mleap-demo) project for an example of building and using a pipeline with MLeap.
+Please see the [mleap-demo](https://github.com/TrueCar/mleap-demo) project for an example of building and using a pipeline with MLeap.
 
 ## Supported Transformers
 
@@ -125,7 +125,7 @@ There are a few ways to contribute to MLeap.
 
 See LICENSE and NOTICE file in this repository.
 
-Copyright 2016 Combust.ML, inc.
+Copyright 2016 TrueCar, inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
