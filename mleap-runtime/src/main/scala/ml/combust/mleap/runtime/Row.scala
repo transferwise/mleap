@@ -166,7 +166,7 @@ case class ArrayRow(values: mutable.WrappedArray[Any]) extends Row {
 
   override def withValue(value: Any): Row = ArrayRow(values :+ value)
 
-  override def selectIndices(indices: Int*): Row = ArrayRow(indices.toArray.map(values))
+  override def selectIndices(indices: Int *): Row = ArrayRow(indices.toArray.map(values))
   override def dropIndex(index: Int): Row = ArrayRow(values.take(index) ++ values.drop(index + 1))
 
   def set(index: Int, value: Any): ArrayRow = {
